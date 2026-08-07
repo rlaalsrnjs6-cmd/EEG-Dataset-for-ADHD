@@ -9,9 +9,9 @@ from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_sc
 # validation_data = pd.read_csv("data/processed/validation_data.csv")
 # test_data = pd.read_csv("data/processed/test_data.csv")
 #구간 단위로 묶은후 파일
-train_data = pd.read_csv("data/processed/train_feature_data.csv")
-validation_data = pd.read_csv("data/processed/validation_feature_data.csv")
-test_data = pd.read_csv("data/processed/test_feature_data.csv")
+train_data = pd.read_csv("data/processed/train_peak200_feature_data.csv")
+validation_data = pd.read_csv("data/processed/validation_peak200_feature_data.csv")
+test_data = pd.read_csv("data/processed/test_peak200_feature_data.csv")
 
 #채널과 클래스(라벨) 분리 id는 제외시켜야함
 x_train = train_data.drop(columns=['ID', 'Class'])
@@ -38,9 +38,9 @@ x_trainscaled = scaler.fit_transform(x_train)
 x_validationscaled = scaler.transform(x_validation)
 x_testscaled = scaler.transform(x_test)
 # 모델 선정
-model = SVC( kernel="rbf", random_state=42)
+# model = SVC( kernel="rbf", random_state=42)
 # model = RandomForestClassifier(n_estimators=200, random_state=42, class_weight="balanced")
-# model = LogisticRegression(max_iter=3000)
+model = LogisticRegression(max_iter=3000)
 # 모델 학습
 model.fit(x_trainscaled, y_train)
 # 모델 평가
@@ -66,9 +66,9 @@ cm = confusion_matrix(y_validation, y_pred)
 
 result_df = pd.DataFrame([
     {
-        "experiment": "SVC_01",
-        "model": "SVC",
-        "input_unit": "128_row_window",
+        "experiment": "LogisticRegression_peak200_03",
+        "model": "LogisticRegression",
+        "input_unit": "128_row_window_peak200",
         "feature_count": x_train.shape[1],
         "train_row_count": x_train.shape[0],
         "validation_row_count": x_validation.shape[0],
@@ -80,7 +80,7 @@ result_df = pd.DataFrame([
         "fp": cm[0, 1],
         "fn": cm[1, 0],
         "tp": cm[1, 1],
-        "note": "SVC모델로 변경"
+        "note": "prominence200 피크 특징 추출후 LogisticRegression 재학습"
     }
 ])
 

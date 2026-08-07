@@ -12,7 +12,7 @@ first_id = eeg_data['ID'].iloc[0]
 #첫번쨰 id의 데이터 가져오기
 first_id_data = eeg_data[eeg_data['ID'] == first_id]
 
-# 데이터를 컴퓨터가 읽기 좋은 배열로 반환
+# 데이터를 find_peaks가 읽기 좋은 배열로 반환
 signal = first_id_data["Fp1"].to_numpy()
 #각각 피크가 300, 500, 1000이상 차이나면 피크로 판단
 peaks_300, properties = find_peaks(signal, prominence=300)

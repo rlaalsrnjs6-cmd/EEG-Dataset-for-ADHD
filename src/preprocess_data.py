@@ -58,8 +58,32 @@ for current_id in eeg_drop['ID'].unique():
         window_std.index = window_std.index + "_std"
         window_min.index = window_min.index + "_min"
         window_max.index = window_max.index + "_max"
-        #76개의 특징을 가진 하나의 변수
-        window_feature = pd.concat([window_mean, window_std, window_min, window_max], axis=0)
+        window_peak_feature = pd.Series(dtype=float)
+        #피크 특징 더하기
+        for channel in eeg_channels:
+            #128행의 채널 데이터를 배열로 만들기
+            channel_signal = window[channel].to_numpy()
+            window_peak, window_properties = find_peaks(channel_signal,prominence=200)
+            window_peak_data = channel_signal[window_peak]
+            window_peak_count = len(window_peak)
+            if window_peak_count > 0:
+                window_peak_mean = window_peak_data.mean()
+                window_peak_std = window_peak_data.std()
+                window_peak_min = window_peak_data.min()
+                window_peak_max = window_peak_data.max()
+            else:
+                # print("window_peak_count가 비어있습니다")
+                window_peak_mean = 0
+                window_peak_std = 0  
+                window_peak_min = 0 
+                window_peak_max = 0
+            window_peak_feature[channel+"_peak_count"] = window_peak_count
+            window_peak_feature[channel+"_peak_mean"] = window_peak_mean
+            window_peak_feature[channel+"_peak_std"] = window_peak_std
+            window_peak_feature[channel+"_peak_min"] = window_peak_min
+            window_peak_feature[channel+"_peak_max"] = window_peak_max
+         #특징을 모아둔 하나의 변수
+        window_feature = pd.concat([window_mean, window_std, window_min, window_max, window_peak_feature], axis=0)
         #이값들의 id와 class도 추가
         window_feature["ID"] = current_id
         window_feature["Class"] = window['Class'].iloc[0]
@@ -68,7 +92,7 @@ for current_id in eeg_drop['ID'].unique():
 
 print(len(feature_list))
 feature_df = pd.DataFrame(feature_list)
-print(feature_df.shape)
+print("특징개수 : ", feature_df.shape)
 
 print("데이터 정제 완료")
 
@@ -106,13 +130,9 @@ train_data = feature_df[feature_df['ID'].isin(train_id['ID'])]
 validation_data = feature_df[feature_df['ID'].isin(validation_id['ID'])]
 test_data = feature_df[feature_df['ID'].isin(test_id['ID'])]
 # 데이터를 csv 파일로 저장
-train_data.to_csv("data/processed/train_feature_data.csv", index=False)
-validation_data.to_csv("data/processed/validation_feature_data.csv", index=False)
-test_data.to_csv("data/processed/test_feature_data.csv", index=False)
+train_data.to_csv("data/processed/train_peak200_feature_data.csv", index=False)
+validation_data.to_csv("data/processed/validation_peak200_feature_data.csv", index=False)
+test_data.to_csv("data/processed/test_peak200_feature_data.csv", index=False)
 print(train_data.shape)
 print(validation_data.shape)
-print(test_data.shape)
-
-
-
-
+print(test_data.shape) 
