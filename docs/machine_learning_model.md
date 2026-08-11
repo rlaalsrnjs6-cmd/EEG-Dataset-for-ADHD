@@ -6,7 +6,7 @@
 
 3. 모델 입력 데이터
 - 원본 EEG데이터를 ID로 구분한 후 128행 단위의 Window로 분할한다.
-- 각 Window의 EEG 신호를 모델에 직접 입력하지 않고 각 EEG채널에서 통계 특징과 Peak 특직을 추출하여 머신러닝 모델의 입력 데이터로 사용한다.
+- 각 Window의 EEG 신호를 모델에 직접 입력하지 않고 각 EEG채널에서 통계 특징과 Peak 특징을 추출하여 머신러닝 모델의 입력 데이터로 사용한다.
 - 19개의 EEG 채널에서 채널당 9개의 특징을 추출하므로 하나의 Window에는 총 171개의 Feature로 반환된다.
 - ID는 피험자를 구분하고 Train, Validation, Test 데이터를 피험자 단위로 분리하기 위해 사용하며 머신러닝모델의 입력 Feature에서는 제외된다. 
 
@@ -18,10 +18,10 @@
 
 3.2 피크 특징
 - Peak 개수(Count)
-- Peak 평군(Mean)
+- Peak 평균(Mean)
 - Peak 표준편차(Standard Deviation)
 - Peak 최솟값(Min)
-- Peak 최댓값(Max0)
+- Peak 최댓값(Max)
 
 4. 비교 머신러닝 모델
 - Logistic Regression
@@ -36,7 +36,7 @@
 - max_iter
 
 6. 학습 데이터 구성
-- 원본의 128hz의 데이를 128행의 단위로 묶어 특징 추출
+- 원본의 128Hz의 데이터를 128행의 단위로 묶어 특징 추출
 - Train / Validation / Test 구분
 - 같은 ID가 다른 데이터셋에 섞이지않게 ID를 기준으로 구분
 - 70% / 15% / 15% 비율로 구분
@@ -83,24 +83,24 @@
 
 10. 최종 모델 선정
 - LogisticRegression
-- 구간단위 실험과 피크 실험을 했을때 모두 LogisticRegression의 Accuracy뿐만 아니라 Precision, Recall, F1_score 모두 큰 상승세를 보였기 때문에 현재 데이터가 LogisticRegression과 가장 잘 맞다고 판단 
+- prominence=200 171 Feature의 조건에서 LogisticRegression이 가장 높은 성능을 보였다. 
 
 11. 모델 저장 및 사용
 - 학습된 모델을 logistic_regression_rpeak200.pk1 저장
 - Scaler 기준 scaler_peak200.pkl 저장
-- predict.py에서 모델과 Sclaer을 불러와 실사용 데이터를 표준화를 거쳐 입력
+- predict.py에서 모델과 Scaler를 불러와 실사용 데이터를 표준화를 거쳐 입력
 
 12. 모델의 한계
-- 실사용ID를 한 명 제외하고 다시 분할을 했을때 성능이 달라졌다.
+- 실사용 ID를 한 명 제외하고 다시 분할을 했을때 성능이 달라졌다.
 - 어떤 피험자가 분리되는지에 따라 성능이 영향을 받는다.
 - 시간 순서를 직접확인 하지않고 평균 표준편차 peak등의 특징으로 변환해야한다.
 - 현재 데이터로 prominence=200이 가장 좋은 결과를 냈지만 다른 데이터에서 200이 최적이라 보장 못함
 
 13. 재현 정보
 - python 3.14.6
-- pandas, scikit-learn, mmatplotlib.pyplot, numpy, joblib
+- pandas, scikit-learn, matplotlib.pyplot, numpy, joblib
 - random_state = 42
-- invalid_test_data.csv
-- test_peak200_feature_data.csv
-- train_peak200_feature_data.csv
-- validation_peak200_feature_data.csv
+- train/validation/test feature CSV
+- model/logistic_regression_rpeak200.pk1
+- model/scaler_peak200.pkl
+- datacheck.py(검증) -> peak_detection.py(피크 확인) -> preprocess_data.py(전처리 및 분류) -> train_model.py(학습 및 평가) -> predict.py(데이터 실사용 에러 발생상황 재현시 new_data경로의 real_test_data.csv를 invalid_test_data.csv로 변경)
