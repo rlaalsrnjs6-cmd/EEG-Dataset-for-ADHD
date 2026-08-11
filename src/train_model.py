@@ -5,6 +5,7 @@ from sklearn.ensemble import RandomForestClassifier
 from sklearn.svm import SVC
 from sklearn.preprocessing import StandardScaler
 from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score, confusion_matrix
+import joblib
 # train_data = pd.read_csv("data/processed/train_data.csv")
 # validation_data = pd.read_csv("data/processed/validation_data.csv")
 # test_data = pd.read_csv("data/processed/test_data.csv")
@@ -12,6 +13,9 @@ from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_sc
 train_data = pd.read_csv("data/processed/train_peak200_feature_data.csv")
 validation_data = pd.read_csv("data/processed/validation_peak200_feature_data.csv")
 test_data = pd.read_csv("data/processed/test_peak200_feature_data.csv")
+
+print(test_data.shape)
+print(test_data.head())
 
 #채널과 클래스(라벨) 분리 id는 제외시켜야함
 x_train = train_data.drop(columns=['ID', 'Class'])
@@ -43,35 +47,37 @@ x_testscaled = scaler.transform(x_test)
 model = LogisticRegression(max_iter=3000)
 # 모델 학습
 model.fit(x_trainscaled, y_train)
+joblib.dump(model, "model/logistic_regression_rpeak200.pk1")
+joblib.dump(scaler, "model/scaler_peak200.pkl")
 # 모델 평가
-y_pred = model.predict(x_validationscaled)
-accuracy = accuracy_score(y_validation, y_pred)
-precision = precision_score(y_validation, y_pred)
-recall = recall_score(y_validation, y_pred)
-f1 = f1_score(y_validation, y_pred)
-print("Validation 정확도: ", accuracy)
-print("Validation 정밀도: ", precision)
-print("Validation 재현율: ", recall)
-print("Validation F1 Score: ", f1)
+y_pred = model.predict(x_testscaled)
+accuracy = accuracy_score(y_test, y_pred)
+precision = precision_score(y_test, y_pred)
+recall = recall_score(y_test, y_pred)
+f1 = f1_score(y_test, y_pred)
+print("test 정확도: ", accuracy)
+print("test 정밀도: ", precision)
+print("test 재현율: ", recall)
+print("test F1 Score: ", f1)
 
 print(y_pred[:20])
-print(y_validation[:20].values)
-print(confusion_matrix(y_validation, y_pred))
+print(y_test[:20].values)
+print(confusion_matrix(y_test, y_pred))
 
 # 결과저장
 results_dir = Path("results")
 results_dir.mkdir(parents=True, exist_ok=True)
 
-cm = confusion_matrix(y_validation, y_pred)
+cm = confusion_matrix(y_test, y_pred)
 
 result_df = pd.DataFrame([
     {
-        "experiment": "LogisticRegression_peak200_03",
+        "experiment": "LogisticRegression_peak200_test",
         "model": "LogisticRegression",
         "input_unit": "128_row_window_peak200",
         "feature_count": x_train.shape[1],
         "train_row_count": x_train.shape[0],
-        "validation_row_count": x_validation.shape[0],
+        "test_row_countt_row_count": y_test.shape[0],
         "accuracy": accuracy,
         "precision": precision,
         "recall": recall,
@@ -80,7 +86,7 @@ result_df = pd.DataFrame([
         "fp": cm[0, 1],
         "fn": cm[1, 0],
         "tp": cm[1, 1],
-        "note": "prominence200 피크 특징 추출후 LogisticRegression 재학습"
+        "note": "실사용 데이터 하나를 제외하고 다시 prominence200 LogisticRegression test "
     }
 ])
 

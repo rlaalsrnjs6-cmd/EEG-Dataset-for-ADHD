@@ -1,6 +1,6 @@
 import pandas as pd
-from scipy.signal import find_peaks
 from sklearn.model_selection import train_test_split
+from feature_extraction import extract_features
 
 #데이터 읽어오기
 raw_df = pd.read_csv("data/raw/adhd_data.csv");
@@ -27,12 +27,16 @@ print ("EEG 채널이 모두 0인 행 개수: ", eeg_zero.sum())
 eeg_drop = null_data[~eeg_zero]
 print ("중복 이상치 모두 제거 후 :  ", eeg_drop.shape[0])
 
+#실사용 데이터
+real_test_id = eeg_drop['ID'].unique()[0]
+real_test_data = eeg_drop[eeg_drop['ID'] == real_test_id]
+model_data = eeg_drop[eeg_drop['ID'] != real_test_id]
 #특징저장용 리스트
 feature_list = []
 
-for current_id in eeg_drop['ID'].unique():
+for current_id in model_data['ID'].unique():
     #id별 데이터 가져오기
-    current_id_data = eeg_drop[eeg_drop['ID'] == current_id]
+    current_id_data = model_data[model_data['ID'] == current_id]
     
     for start in range(0, len(current_id_data), window_size):
         #128행씩 자르기 window=128행의 모든 데이터
@@ -41,49 +45,8 @@ for current_id in eeg_drop['ID'].unique():
         if len(window) < window_size:
             continue
         # print(window.shape)
-        #128행의 채널값만 가져오기
-        window_eeg = window[eeg_channels]   
-        # print(window_eeg.shape)
-        #128행의 컬럼별 특징 하나로 추출 기본이 axis=0(세로)
-        window_mean = window_eeg.mean()
-        # print(window_mean)
-        window_std = window_eeg.std()
-        # print(window_std)
-        window_min = window_eeg.min()
-        # print(window_min)
-        window_max = window_eeg.max()
-        # print(window_max)1
-        #이름이 같아지지않게 구분
-        window_mean.index = window_mean.index + "_mean"
-        window_std.index = window_std.index + "_std"
-        window_min.index = window_min.index + "_min"
-        window_max.index = window_max.index + "_max"
-        window_peak_feature = pd.Series(dtype=float)
-        #피크 특징 더하기
-        for channel in eeg_channels:
-            #128행의 채널 데이터를 배열로 만들기
-            channel_signal = window[channel].to_numpy()
-            window_peak, window_properties = find_peaks(channel_signal,prominence=200)
-            window_peak_data = channel_signal[window_peak]
-            window_peak_count = len(window_peak)
-            if window_peak_count > 0:
-                window_peak_mean = window_peak_data.mean()
-                window_peak_std = window_peak_data.std()
-                window_peak_min = window_peak_data.min()
-                window_peak_max = window_peak_data.max()
-            else:
-                # print("window_peak_count가 비어있습니다")
-                window_peak_mean = 0
-                window_peak_std = 0  
-                window_peak_min = 0 
-                window_peak_max = 0
-            window_peak_feature[channel+"_peak_count"] = window_peak_count
-            window_peak_feature[channel+"_peak_mean"] = window_peak_mean
-            window_peak_feature[channel+"_peak_std"] = window_peak_std
-            window_peak_feature[channel+"_peak_min"] = window_peak_min
-            window_peak_feature[channel+"_peak_max"] = window_peak_max
-         #특징을 모아둔 하나의 변수
-        window_feature = pd.concat([window_mean, window_std, window_min, window_max, window_peak_feature], axis=0)
+        #함수로 교체
+        window_feature = extract_features(window, eeg_channels)
         #이값들의 id와 class도 추가
         window_feature["ID"] = current_id
         window_feature["Class"] = window['Class'].iloc[0]
@@ -133,6 +96,7 @@ test_data = feature_df[feature_df['ID'].isin(test_id['ID'])]
 train_data.to_csv("data/processed/train_peak200_feature_data.csv", index=False)
 validation_data.to_csv("data/processed/validation_peak200_feature_data.csv", index=False)
 test_data.to_csv("data/processed/test_peak200_feature_data.csv", index=False)
+real_test_data.to_csv("data/processed/real_test_data.csv", index=False)
 print(train_data.shape)
 print(validation_data.shape)
 print(test_data.shape) 
