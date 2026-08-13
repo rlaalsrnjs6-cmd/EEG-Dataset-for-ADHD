@@ -2,38 +2,6 @@ import hashlib
 import pandas as pd
 from pathlib import Path
 
-
-#해시 계산
-def calculate_file_hash(file_path):
-    sha256 = hashlib.sha256()
-        #파일을 바이트로 읽겠다 
-    with open(file_path, "rb") as file:
-        while True:
-            #8192바이트 단위로 읽겠다
-            chunk = file. read(8192)
-
-            if not chunk:
-                break
-
-            sha256.update(chunk)
-            #문자열 형태로 바꾸기
-    return sha256.hexdigest()
-
-def calculate_code_hash(file_paths):
-    sha256 = hashlib.sha256()
-
-    for file_path in file_paths:
-        print(file_path)
-        with open(file_path, "rb") as file:
-            while True:
-                chunk = file.read(8192)
-
-                if not chunk:
-                    break
-
-                sha256.update(chunk)
-    return sha256.hexdigest()
-
 #로그저장
 def save_log(record, log_path):
     log_path = Path(log_path)
@@ -51,3 +19,47 @@ def save_log(record, log_path):
         index=False,
         encoding="utf-8-sig"
     )
+
+#해시 계산
+def calculate_file_hash(file_path):
+    sha256 = hashlib.sha256()
+        #파일을 바이트로 읽겠다 
+    with open(file_path, "rb") as file:
+        while True:
+            #8192바이트 단위로 읽겠다
+            chunk = file. read(8192)
+
+            if not chunk:
+                break
+
+            sha256.update(chunk)
+            #문자열 형태로 바꾸기
+    return sha256.hexdigest()
+
+#코드해시생성
+def calculate_code_hash(file_paths):
+    sha256 = hashlib.sha256()
+
+    for file_path in file_paths:
+        print(file_path)
+        with open(file_path, "rb") as file:
+            while True:
+                chunk = file.read(8192)
+
+                if not chunk:
+                    break
+
+                sha256.update(chunk)
+    return sha256.hexdigest()
+
+#해시비교
+def verify_file_hash(file_path, saved_hash):
+    current_hash = calculate_file_hash(file_path)
+
+    return current_hash == saved_hash
+
+#코드해시비교
+def verify_code_hash(file_paths, saved_hash):
+    current_hashs = calculate_code_hash(file_paths)
+    
+    return current_hashs == saved_hash

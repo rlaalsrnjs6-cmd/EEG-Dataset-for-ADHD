@@ -18,29 +18,17 @@ new_data = pd.read_csv(real_test_data)
 # invalid_data.loc[0,eeg_channels] = 0
 # invalid_data.to_csv("data/processed/invalid_test_data.csv",index=False)
 # invalid_data_path="data/processed/invalid_test_data.csv"
-input_hash  = calculate_file_hash(new_data)
+input_hash  = calculate_file_hash(real_test_data)
 file_paths = [
     "src/predict.py",
     "src/data_validation.py",
     "src/feature_extraction.py",
     "src/utils.py"
 ]
-code_hash = calculate_code_hash(real_test_data)
+code_hash = calculate_code_hash(file_paths)
 print(input_hash)
 print(code_hash)
-predict_log = pd.read_csv("logs/predict.csv")
-latest_predict = predict_log.iloc[-1]
 
-saved_hash = latest_predict["code_hash"]
-code_hash = calculate_code_hash(file_paths)
-
-result = code_hash == saved_hash
-
-if result:
-    print("해시값이 그대로입니다.")
-else:
-    print("해시값이 변했습니다.")
-    
 window_size = 128
 prominence = 200
 

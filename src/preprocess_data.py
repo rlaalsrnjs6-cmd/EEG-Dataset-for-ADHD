@@ -147,18 +147,7 @@ file_paths = [
     "src/utils.py"
     ]
 
-preprocess_log = pd.read_csv("logs/preprocess_log.csv")
-latest_preprocess = preprocess_log.iloc[-1]
-
-saved_hash = latest_preprocess["code_hash"]
 code_hash = calculate_code_hash(file_paths)
-
-result = code_hash == saved_hash
-
-if result:
-    print("해시값이 그대로입니다.")
-else:
-    print("해시값이 변했습니다.")
 
 # 전처리 딕셔너리
 preprocess_record = {
