@@ -1,7 +1,8 @@
 import pandas as pd
 from scipy.signal import find_peaks
 
-def extract_features(window, eeg_channels):
+
+def extract_features(window, eeg_channels, prominence):
      #128행의 채널값만 가져오기
     window_eeg = window[eeg_channels]   
     # print(window_eeg.shape)
@@ -24,8 +25,11 @@ def extract_features(window, eeg_channels):
     for channel in eeg_channels:
         #128행의 채널 데이터를 배열로 만들기
         channel_signal = window[channel].to_numpy()
-        window_peak, window_properties = find_peaks(channel_signal,prominence=200)
+        #피크 위치 추출
+        window_peak, window_properties = find_peaks(channel_signal,prominence=prominence)
+        #피크 데이터 추출
         window_peak_data = channel_signal[window_peak]
+        #피크 개수
         window_peak_count = len(window_peak)
         if window_peak_count > 0:
             window_peak_mean = window_peak_data.mean()

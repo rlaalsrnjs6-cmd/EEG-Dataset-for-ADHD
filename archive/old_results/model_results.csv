@@ -1,4 +1,4 @@
-experiment,model,input_unit,feature_count,train_row_count,validation_row_count,accuracy,precision,recall,f1_score,tn,fp,fn,tp,note
+실험명,모델,입력 단위,특징 개수,학습 데이터 수,검증 데이터 수,정확도,정밀도,재현율,f1_score,tn,fp,fn,tp,비고
 LogisticRegression_01,LogisticRegression,single_eeg_row,19,1435384,364118,0.6015385122405374,0.6016580413356627,0.9996668233661794,0.7511999547283961,1,145014,73,219030,19개 EEG 채널의 한 시점을 한 샘플로 학습
 LogisticRegression_02,LogisticRegression,single_eeg_row,19,1435384,364118,0.6015275267907656,0.6016536644324799,0.9996485671122713,0.7511913887331237,1,145014,77,219026,구간 단위로 묶기전 표준화만 진행후 학습 평가
 LogisticRegression_03,LogisticRegression,128_row_window,38,11175,2836,0.6886459802538787,0.7193823216187434,0.7914469830111306,0.7536959553695955,602,527,356,1351,128행 구간 평균.표준편차 특징으로 학습 (표준화x)

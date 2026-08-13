@@ -1,8 +1,8 @@
 import pandas as pd
 
-# 해당 경로의 csv 파일을 읽어옴
+# 해당 경로의 csv파일을 읽어옴
 raw_df = pd.read_csv("data/raw/adhd_data.csv");
-#제대로 불러왔나 확인
+# 제대로 불러왔나 확인
 print("raw_df.head()")
 print (raw_df.head())
 print("raw_df.tail()")
@@ -21,14 +21,14 @@ for id, count in class_count.items():
     if count > 1:
         print("id별 클래스 개수가 1개이상인 경우가 존재 합니다")
 print ("중복확인")
-#  중복 데이터 개수 확인
+# 중복 데이터 개수 확인
 print (raw_df.duplicated().sum())
 # 중복 데이터가 뭔지 확인
 # print (raw_df[raw_df.duplicated()])
 print(raw_df[raw_df.duplicated(keep=False)])
 print("결측치 개수")
 print(raw_df.isnull().sum())
-#평균 표균편차 최소 최대 값 확인
+# 평균 표균편차 최소 최대 값 확인
 print("평균 표준편차 최소 최대 값 확인")
 print(raw_df.describe())
 

@@ -1,0 +1,2 @@
+﻿run_time,code_hash,input_hash,error_type,message
+2026-08-13 17:36:17,375e8f6c05130751ce96514ae7c1304342df3285f914816fb082f001cb95d455,83b420b42db0a4bef6f535a6110796ddff5c9ea5b847d00ac665e165b8c39276,all_zero_eeg,EEG 채널이 모두 0인 행이 있습니다.
