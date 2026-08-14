@@ -8,7 +8,7 @@ from sklearn.svm import SVC
 from sklearn.preprocessing import StandardScaler
 from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score, confusion_matrix
 import joblib
-from docs.src.utils import calculate_file_hash, save_log, calculate_code_hash
+from utils import calculate_file_hash, save_log, calculate_code_hash
 
 #피크특징 추출 후
 train_data_path = "data/processed/train_peak200_feature_data.csv"

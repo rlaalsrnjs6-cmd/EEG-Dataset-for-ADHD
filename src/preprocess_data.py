@@ -3,8 +3,8 @@ from zoneinfo import ZoneInfo
 import pandas as pd
 from pathlib import Path
 from sklearn.model_selection import train_test_split
-from docs.src.feature_extraction import extract_features
-from docs.src.utils import calculate_file_hash, save_log, calculate_code_hash
+from feature_extraction import extract_features
+from utils import calculate_file_hash, save_log, calculate_code_hash
 
 #데이터 읽어오기
 raw_data_path = "data/raw/adhd_data.csv"
@@ -100,6 +100,7 @@ control_train, control_temp = train_test_split(control_group, test_size=0.3, ran
 #validation test 분리
 adhd_validation, adhd_test = train_test_split(adhd_temp, test_size=0.5, random_state=random_state)
 control_validation, control_test = train_test_split(control_temp, test_size=0.5, random_state=random_state)
+
 print("train 개수 : ", len(adhd_train) + len(control_train))
 print("Validation 개수 : ", len(adhd_validation) + len(control_validation))
 print("Test 개수 : ", len(adhd_test) + len(control_test))

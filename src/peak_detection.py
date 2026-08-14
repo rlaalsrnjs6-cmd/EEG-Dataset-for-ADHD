@@ -1,7 +1,6 @@
 # 목적 피크의 특징을 추출하기전 find_peaks가 제대로 작동하는지 확인
 # 기본prominence를 임시 선정
 
-
 import pandas as pd
 import matplotlib.pyplot as plt
 from scipy.signal import find_peaks
