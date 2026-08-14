@@ -3,9 +3,8 @@ from zoneinfo import ZoneInfo
 import pandas as pd
 from pathlib import Path
 from sklearn.model_selection import train_test_split
-from feature_extraction import extract_features
-from utils import calculate_file_hash, save_log, calculate_code_hash
-from verify_hash import verify_file_hash
+from docs.src.feature_extraction import extract_features
+from docs.src.utils import calculate_file_hash, save_log, calculate_code_hash
 
 #데이터 읽어오기
 raw_data_path = "data/raw/adhd_data.csv"
@@ -128,7 +127,7 @@ print(test_data.shape)
 train_data_path = "data/processed/train_peak200_feature_data.csv"
 validation_data_path = "data/processed/validation_peak200_feature_data.csv"
 test_data_path = "data/processed/test_peak200_feature_data.csv"
-real_test_data_path = "data/processed/real_test_data.csv"
+real_test_data_path = "resource/real_test_data.csv"
 
 train_data.to_csv(train_data_path, index=False)
 validation_data.to_csv(validation_data_path, index=False)

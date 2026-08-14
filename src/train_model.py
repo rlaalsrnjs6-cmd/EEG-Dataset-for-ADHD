@@ -8,7 +8,7 @@ from sklearn.svm import SVC
 from sklearn.preprocessing import StandardScaler
 from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score, confusion_matrix
 import joblib
-from utils import calculate_file_hash, save_log, calculate_code_hash
+from docs.src.utils import calculate_file_hash, save_log, calculate_code_hash
 
 #피크특징 추출 후
 train_data_path = "data/processed/train_peak200_feature_data.csv"
@@ -23,6 +23,7 @@ train_data_hash = calculate_file_hash(train_data_path)
 validation_data_hash = calculate_file_hash(validation_data_path)
 test_data_hash = calculate_file_hash(test_data_path)
 
+#validation으로 할지 test로 할지
 eval_type = "test"
 
 if eval_type == "validation":
@@ -97,19 +98,9 @@ file_paths = [
     "src/train_model.py",
     "src/utils.py"
 ]
-code_hash = calculate_code_hash(file_paths)
-model_log = pd.read_csv("logs/model_result.csv")
-latest_model = model_log.iloc[-1]
 
-saved_hash = latest_model["code_hash"]
 code_hash = calculate_code_hash(file_paths)
 
-result = code_hash == saved_hash
-
-if result:
-    print("해시값이 그대로입니다.")
-else:
-    print("해시값이 변했습니다.")
 cm = confusion_matrix(y_eval, y_pred)
 
 result_record ={

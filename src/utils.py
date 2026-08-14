@@ -41,7 +41,7 @@ def calculate_code_hash(file_paths):
     sha256 = hashlib.sha256()
 
     for file_path in file_paths:
-        print(file_path)
+        # print(file_path)
         with open(file_path, "rb") as file:
             while True:
                 chunk = file.read(8192)
@@ -51,15 +51,3 @@ def calculate_code_hash(file_paths):
 
                 sha256.update(chunk)
     return sha256.hexdigest()
-
-#해시비교
-def verify_file_hash(file_path, saved_hash):
-    current_hash = calculate_file_hash(file_path)
-
-    return current_hash == saved_hash
-
-#코드해시비교
-def verify_code_hash(file_paths, saved_hash):
-    current_hashs = calculate_code_hash(file_paths)
-    
-    return current_hashs == saved_hash

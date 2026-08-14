@@ -1,28 +1,30 @@
 import pandas as pd 
 from utils import calculate_code_hash, calculate_file_hash
 
+# 단일해시 검사용
 def verify_file_hash(file_path, saved_hash):
     current_hash = calculate_file_hash(file_path)
 
     return current_hash == saved_hash
 
+# 코드해시 검사용
 def verify_code_hash(file_paths, saved_hash):
     current_hash = calculate_code_hash(file_paths)
 
     return current_hash == saved_hash
 
+#preprocess_log
 file_paths = [
     "src/preprocess_data.py",
     "src/feature_extraction.py",
     "src/utils.py"
 ]
 
-#preprocess_log
 raw_data_path = "data/raw/adhd_data.csv"
 train_data_path = "data/processed/train_peak200_feature_data.csv"
 validation_data_path = "data/processed/validation_peak200_feature_data.csv"
 test_data_path = "data/processed/test_peak200_feature_data.csv"
-real_test_data_path = "data/processed/real_test_data.csv"
+real_test_data_path = "resource/real_test_data.csv"
 
 preprocess_log = pd.read_csv("logs/preprocess_log.csv")
 latest_preprocess = preprocess_log.iloc[-1]
@@ -58,10 +60,12 @@ predict_file_paths = [
     "src/feature_extraction.py",
     "src/utils.py"
 ]
+
 predict_log = pd.read_csv("logs/predict.csv")
 latest_predict = predict_log.iloc[-1]
 predict_result = verify_code_hash(predict_file_paths, latest_predict["code_hash"])
 
+#확인용 출력
 print("원본 데이터 :", "정상" if raw_result else "변경됨")
 print("Train 데이터 :", "정상" if train_result else "변경됨")
 print("Validation 데이터 :", "정상" if validation_result else "변경됨")
