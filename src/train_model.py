@@ -4,6 +4,7 @@ from datetime import datetime
 from zoneinfo import ZoneInfo
 # from sklearn.ensemble import RandomForestClassifier
 # from sklearn.svm import SVC
+# from xgboost import XGBClassifier
 from sklearn.linear_model import LogisticRegression
 from sklearn.preprocessing import StandardScaler
 from sklearn.pipeline import Pipeline
@@ -25,7 +26,7 @@ validation_data_hash = calculate_file_hash(validation_data_path)
 test_data_hash = calculate_file_hash(test_data_path)
 
 #validation으로 할지 test로 할지
-eval_type = "test"
+eval_type = "validation"
 
 if eval_type == "validation":
     eval_data = validation_data
@@ -65,15 +66,17 @@ y_eval = y_eval.replace({"ADHD": 1, "Control": 0}).astype(int)
 # x_evalscaled = scaler.transform(x_eval)
 # x_validationscaled = scaler.transform(x_validation)
 # x_testscaled = scaler.transform(x_test)
+
 # 모델 선정
 # model = SVC( kernel="rbf", random_state=42)
 # model = RandomForestClassifier(n_estimators=200, random_state=42, class_weight="balanced")
+# model = LogisticRegression(max_iter=3000)
+# model = XGBClassifier(random_state=42)
 #기존 표준화와 모델 선정을 한번에
 model = Pipeline([
     ("scaler", StandardScaler()),
     ("logistic", LogisticRegression(max_iter=3000))
 ])
-# model = LogisticRegression(max_iter=3000)
 # 모델 학습
 model.fit(x_train, y_train)
 
@@ -98,7 +101,7 @@ model_data = {
     "recall":recall,
     "f1":f1
 }
-model_path ="model/logistic_regression_rpeak200.pkl"
+model_path ="model/logistic_regression_peak200.pkl"
 
 joblib.dump(model_data, model_path)
 
@@ -140,7 +143,7 @@ result_record ={
         "fp": cm[0, 1],
         "fn": cm[1, 0],
         "tp": cm[1, 1],
-        "note": f"기록을 남기는 첫번째 버전으로써 LogisticRegression 모델 실행 {eval_type} "
+        "note": f"LogisticRegression모델 학습 평가 {eval_type} "
     }
 
 result_path = Path("logs/model_results.csv")
