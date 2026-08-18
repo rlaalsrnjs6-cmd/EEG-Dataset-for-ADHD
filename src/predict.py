@@ -11,12 +11,12 @@ real_test_data = "resource/real_test_data.csv"
 
 new_data = pd.read_csv(real_test_data)
 
-# 에러 작동 테스트시 주석해체 그리고 하단 input_hash는 inxalid_data_path로 바꿔주기 
+# 에러 작동 테스트시 주석해체 그리고 하단 input_hash는 invalid_data_path로 바꿔주기 
 # validation_eeg new_data를 invalid_data로 변경
-# invalid_data = new_data.copy()
-# invalid_data.loc[0,eeg_channels] = 0
-# invalid_data.to_csv("data/processed/invalid_test_data.csv",index=False)
-# invalid_data_path="data/processed/invalid_test_data.csv"
+invalid_data = new_data.copy()
+invalid_data.loc[0,eeg_channels] = 0
+invalid_data.to_csv("data/processed/invalid_test_data.csv",index=False)
+invalid_data_path="data/processed/invalid_test_data.csv"
 
 # 실사용 데이터의 해시
 input_hash  = calculate_file_hash(real_test_data)
@@ -52,16 +52,19 @@ feature_df = pd.DataFrame(feature_list)
 
 #모델 표준화객체 불러오기
 model_path = "model/logistic_regression_rpeak200.pkl"
-scaler_path = "model/scaler_peak200.pkl"
-model = joblib.load(model_path)
-scaler = joblib.load(scaler_path)
+# scaler_path = "model/scaler_peak200.pkl"
+model_data = joblib.load(model_path)
+model = model_data["pipeline"]
+accuracy = model_data["accuracy"]
+eval_type = model_data["eval_type"]
+# scaler = joblib.load(scaler_path)
 model_hash = calculate_file_hash(model_path)
-scaler_hash = calculate_file_hash(scaler_path)
+# scaler_hash = calculate_file_hash(scaler_path)
 print(feature_df.shape)
 # 표준화된 특징
-scaled_feature = scaler.transform(feature_df)
+# scaled_feature = scaler.transform(feature_df)
 # 모델에 입력 후 값
-prediction = model.predict_proba(scaled_feature)
+prediction = model.predict_proba(feature_df)
 # prediction = model.predict(scaled_feature)
 
 # adhd_count = (prediction == 1).sum()
@@ -80,6 +83,8 @@ mean_adhd_prediction = adhd_prediction.mean()
 print("==========================================================================================")
 print("※ 본 모델의 예측 결과는 판단을 보조하기 위한 참고 정보이며, ADHD 진단을 의미하지 않습니다.")
 print("==========================================================================================")
+
+print(f"모델의 {eval_type} 정확도 : {accuracy:.2%}")
 print(f"모델이 예측한 ADHD 클래스 확률의 평균 : {mean_adhd_prediction:.2%}")
 
 # 저장용 딕셔너리
@@ -88,7 +93,6 @@ predict_record ={
     "code_hash": code_hash,
     "input_hash": input_hash,
     "model_hash": model_hash,
-    "scaler_hash": scaler_hash,
     "window_count": len(feature_df),
     "mean_adhd_probability": mean_adhd_prediction,
     "note": "오류코드 실행 eroor_log가 작동하는지 확인"

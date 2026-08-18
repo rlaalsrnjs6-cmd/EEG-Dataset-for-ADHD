@@ -2,10 +2,11 @@ import pandas as pd
 from pathlib import Path
 from datetime import datetime
 from zoneinfo import ZoneInfo
+# from sklearn.ensemble import RandomForestClassifier
+# from sklearn.svm import SVC
 from sklearn.linear_model import LogisticRegression
-from sklearn.ensemble import RandomForestClassifier
-from sklearn.svm import SVC
 from sklearn.preprocessing import StandardScaler
+from sklearn.pipeline import Pipeline
 from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score, confusion_matrix
 import joblib
 from utils import calculate_file_hash, save_log, calculate_code_hash
@@ -59,28 +60,27 @@ y_eval = y_eval.replace({"ADHD": 1, "Control": 0}).astype(int)
 # y_test = y_test.replace({"ADHD": 1, "Control": 0}).astype(int)
 
 #표준화
-scaler = StandardScaler()
-x_trainscaled = scaler.fit_transform(x_train)
-x_evalscaled = scaler.transform(x_eval)
+# scaler = StandardScaler()
+# x_trainscaled = scaler.fit_transform(x_train)
+# x_evalscaled = scaler.transform(x_eval)
 # x_validationscaled = scaler.transform(x_validation)
 # x_testscaled = scaler.transform(x_test)
 # 모델 선정
 # model = SVC( kernel="rbf", random_state=42)
 # model = RandomForestClassifier(n_estimators=200, random_state=42, class_weight="balanced")
-model = LogisticRegression(max_iter=3000)
+#기존 표준화와 모델 선정을 한번에
+model = Pipeline([
+    ("scaler", StandardScaler()),
+    ("logistic", LogisticRegression(max_iter=3000))
+])
+# model = LogisticRegression(max_iter=3000)
 # 모델 학습
-model.fit(x_trainscaled, y_train)
+model.fit(x_train, y_train)
 
-model_path ="model/logistic_regression_rpeak200.pkl"
-scaler_path = "model/scaler_peak200.pkl"
-joblib.dump(model, model_path)
-joblib.dump(scaler, scaler_path)
-#해시
-model_hash = calculate_file_hash(model_path)
-scaler_hash = calculate_file_hash(scaler_path)
+
 
 # 모델 평가
-y_pred = model.predict(x_evalscaled)
+y_pred = model.predict(x_eval)
 accuracy = accuracy_score(y_eval, y_pred)
 precision = precision_score(y_eval, y_pred)
 recall = recall_score(y_eval, y_pred)
@@ -89,6 +89,21 @@ print("eval 정확도: ", accuracy)
 print("eval 정밀도: ", precision)
 print("eval 재현율: ", recall)
 print("eval F1 Score: ", f1)
+
+model_data = {
+    "pipeline" :model,
+    "eval_type":eval_type,
+    "accuracy": accuracy,
+    "precision":precision,
+    "recall":recall,
+    "f1":f1
+}
+model_path ="model/logistic_regression_rpeak200.pkl"
+
+joblib.dump(model_data, model_path)
+
+#해시
+model_hash = calculate_file_hash(model_path)
 
 print(y_pred[:20])
 print(y_eval[:20].values)
@@ -110,7 +125,6 @@ result_record ={
         "model": "LogisticRegression",
         "code_hash": code_hash,
         "model_hash": model_hash,
-        "scaler_hash": scaler_hash,
         "train_data_hash": train_data_hash,
         "eval_type": eval_type,
         "eval_hash": eval_hash,
