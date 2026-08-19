@@ -1,13 +1,13 @@
 # 1. 실험 결과
 
-- 피크 특징 적용전 실험결과
+- 구간단위 분할 적용전 실험결과
 
 | 모델 | 단계 | Feature | Accuracy | Precision | Recall | F1-score |
 |---|---:|---:|---:|---:|---:|---:|
 | LogisticRegression | EEG의 한행을 그대로 | 19 | 0.6015 | 0.6016 | 0.9999 | 0.7511 |
 | LogisticRegression | EEG의 한행을 그대로 표준화 진행 | 19 | 0.6015 | 0.6016 | 0.9996 | 0.7511 |
 
-- 구간 단위 Window 설정 후 실험 결과
+- 구간 단위 Window 설정 후 통계특징 추출 실험 결과
 
 | 모델 | 단계 | Feature | Accuracy | Precision | Recall | F1-score |
 |---|---:|---:|---:|---:|---:|---:|
@@ -42,6 +42,12 @@
 | 모델 | 단계 | Feature | Accuracy | Precision | Recall | F1-score |
 |---|---:|---:|---:|---:|---:|---:|
 | LogisticRegression | Prominence200후 test | 171 | 0.7428 | 0.7301 | 0.8597 | 0.7896 |
+
+- XG부스터 모델 변경
+
+| 모델 | 단계 | Feature | Accuracy | Precision | Recall | F1-score |
+|---|---:|---:|---:|---:|---:|---:|
+| XGBoost |  XGBoost 모델 변경후 validation 테스트 | 171 | 0.6190 | 0.6208 | 0.7309 | 0.6714 |
 
 # 2. 결론
 

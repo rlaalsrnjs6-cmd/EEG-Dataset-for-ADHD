@@ -1,12 +1,11 @@
 # 1. 모델
 
 - LogisticRegression
-- Peak prominence를 여러 값으로 비교한 결과 prominence=200에서 가장 높은 Validation 성능을 확인하였다. 이후 동일 조건에서 Random Forest와 SVM을 비교한 결과 LogisticRegression의 성능이 가장 높아 최종 모델로 선정하였다.
+- Peak prominence를 여러 값으로 비교한 결과 prominence=200에서 가장 높은 Validation 성능을 확인하였다. 이후 동일 조건에서 Random Forest와 SVM, GXBoost를 비교한 결과 LogisticRegression의 성능이 가장 높아 최종 모델로 선정하였다.
 
 # 2. 모델 저장 및 사용
 
 - 학습된 모델을 logistic_regression_rpeak200.pkl 저장
-- Scaler 기준 scaler_peak200.pkl 저장
 - predict.py에서 모델과 Scaler를 불러와 실사용 데이터를 표준화를 거쳐 모델에 입력
 
 # 3. 모델의 한계
