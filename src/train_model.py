@@ -101,7 +101,9 @@ model_data = {
     "recall":recall,
     "f1":f1
 }
-model_path ="model/logistic_regression_peak200.pkl"
+model_path ="model/training_model/logistic_regression_peak200.pkl"
+#모델 확정 할때만 주석 해체 
+# model_path = "model/release_model/logistic_regression_peak200.pkl"
 
 joblib.dump(model_data, model_path)
 

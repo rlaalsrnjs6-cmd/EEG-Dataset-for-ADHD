@@ -51,7 +51,7 @@ for start in range(0, len(new_data), window_size):
 feature_df = pd.DataFrame(feature_list)
 
 #모델 표준화객체 불러오기
-model_path = "model/logistic_regression_peak200.pkl"
+model_path = "model/release_model/logistic_regression_peak200_v1.0.1.pkl"
 # scaler_path = "model/scaler_peak200.pkl"
 model_data = joblib.load(model_path)
 model = model_data["pipeline"]
