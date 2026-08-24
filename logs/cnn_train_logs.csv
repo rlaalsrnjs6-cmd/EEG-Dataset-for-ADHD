@@ -1,0 +1,5 @@
+﻿run_time,experiment,model,learning_rate,batch_size,epochs,random_seed,best_validation_accuracy,best_epoch,train_loss_at_best,validation_loss_at_best,experiment_detail,note
+2026-08-21 10:06:09,cnn_baseline,eeg_cnn,0.001,32,10,42,0.7614906832298136,5,0.0777691728068845,2.2599233210385137,과적합 여부를 확인하기위한 cnn_baseline 실험,cnn 기본모델 실험
+2026-08-21 10:09:16,cnn_dropout_05,eeg_cnn,0.001,32,10,42,0.770600414078675,7,0.11265800034293509,3.044433756313849,Dropout(p=0.5) 적용,Dropout 적용 후 과적합 감소 여부 확인
+2026-08-21 10:14:08,cnn_weight_decay_0001,eeg_cnn,0.001,32,10,42,0.7577639751552795,1,1.8014391279311142,0.6846976189959892,weight_decay=0.0001,Dropout 적용 후에도 과적합 확인 단독 weight_decay 적용 후 과적합 확인
+2026-08-21 10:17:26,cnn_dropout_05_weight_decay_0001,eeg_cnn,0.001,32,10,42,0.7445134575569358,7,0.12169842080126944,2.986921885816843,weight_decay=0.0001_drop=(p=0.5),단독 weight_decay 적용후에도 과적합 확인 드롭아웃 웨이트디케이 동시적용 후 과적합 확인
