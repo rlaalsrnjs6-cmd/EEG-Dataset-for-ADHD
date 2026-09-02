@@ -9,7 +9,7 @@ from utils import save_log
 raw_df = pd.read_csv("data/raw/adhd_data.csv")
 
 random_state = 42
-window_size = 128
+window_size = 512
 
 eeg_channels = ['Fp1', 'Fp2', 'F3', 'F4', 'C3', 'C4', 'P3', 'P4', 'O1', 'O2', 'F7', 'F8', 'T7', 'T8', 'P7', 'P8', 'Fz', 'Cz', 'Pz']
 
@@ -132,7 +132,7 @@ real_array = np.stack(real_test_windows)
 
 # 3차원 배열이라 npz파일로 저장
 np.savez(
-    "data/cnn_processed/cnn_data.npz",
+    "data/cnn_processed/cnn_data4.npz",
     train_windows=train_array,
     train_labels=np.array(train_labels),
     validation_windows=validation_array,

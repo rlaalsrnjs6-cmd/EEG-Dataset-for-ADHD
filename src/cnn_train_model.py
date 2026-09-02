@@ -12,7 +12,7 @@ torch.manual_seed(42)
 batch_size = 32
 
 # npz파일 읽어오기
-data = np.load("data/cnn_processed/cnn_data.npz")
+data = np.load("data/cnn_processed/cnn_data5.npz")
 train_array = data["train_windows"]
 train_labels = data["train_labels"]
 validation_array = data["validation_windows"]
@@ -139,7 +139,7 @@ class eeg_cnn(nn.Module):
         # ADHD / Control 분류를 위한 최종 출력 생성
         self.fc = nn.Linear(
             #  현재로선 1920개의 특징
-            in_features=1920,
+            in_features=10112,
             # 출력 뉴런
             out_features=2
         )
@@ -163,7 +163,7 @@ class eeg_cnn(nn.Module):
 model = eeg_cnn()
 
 # 예측과 정답을 비교해 로스계산
-# 강하게 확신만 만큼 큰 로스 부여
+# 정답 클래스에 대한 모델의 점수가 낮을수록 큰 Loss를 부여
 criterion = nn.CrossEntropyLoss()
 
 # 로스를 줄이는 방향으로 가중치 수정
@@ -197,6 +197,7 @@ for epoch in range(epochs):
         optimizer.zero_grad()
 
         # forward순서대로 통과시켜 예측값 생성
+        # 신경망 입력
         output = model(batch_windows)
 
         # 로스계산
@@ -218,7 +219,7 @@ for epoch in range(epochs):
     with torch.no_grad():
         for batch_windows, batch_labels in validation_loader:
 
-            # 포워ㅗ드 순서대로 예측값 생성
+            # 포워드 순서대로 예측값 생성
             output = model(batch_windows)
 
             # 로스 계산

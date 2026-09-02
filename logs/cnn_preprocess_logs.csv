@@ -1,2 +1,9 @@
 ﻿run_time,input_file,window_size,channel_count,random_seed,raw_row_count,after_duplicate_count,after_null_count,after_zero_remove_count,train_window_count,validation_window_count,test_window_count,real_window_count,train_id_count,validation_id_count,test_id_count,real_id_count,output_file,note
 2026-08-21 09:54:44,data/raw/adhd_data.csv,128,19,42,2166383,2166338,2166338,2166337,11564,2415,2780,111,84,18,18,1,data/cnn_processed/cnn_data.npz,ID 단위 70/15/15 분할
+2026-08-31 13:18:42,data/raw/adhd_data.csv,640,19,42,2166383,2166338,2166338,2166337,2276,477,547,22,84,18,18,1,data/cnn_processed/cnn_data.npz,ID 단위 70/15/15 분할
+2026-08-31 13:41:54,data/raw/adhd_data.csv,1280,19,42,2166383,2166338,2166338,2166337,1116,234,269,11,84,18,18,1,data/cnn_processed/cnn_data.npz,ID 단위 70/15/15 분할
+2026-08-31 13:45:45,data/raw/adhd_data.csv,256,19,42,2166383,2166338,2166338,2166337,5760,1201,1384,55,84,18,18,1,data/cnn_processed/cnn_data.npz,ID 단위 70/15/15 분할
+2026-08-31 13:46:15,data/raw/adhd_data.csv,1280,19,42,2166383,2166338,2166338,2166337,1116,234,269,11,84,18,18,1,data/cnn_processed/cnn_data.npz,ID 단위 70/15/15 분할
+2026-08-31 13:46:40,data/raw/adhd_data.csv,256,19,42,2166383,2166338,2166338,2166337,5760,1201,1384,55,84,18,18,1,data/cnn_processed/cnn_data.npz,ID 단위 70/15/15 분할
+2026-08-31 13:50:06,data/raw/adhd_data.csv,384,19,42,2166383,2166338,2166338,2166337,3828,800,923,37,84,18,18,1,data/cnn_processed/cnn_data.npz,ID 단위 70/15/15 분할
+2026-08-31 13:54:00,data/raw/adhd_data.csv,512,19,42,2166383,2166338,2166338,2166337,2861,596,689,27,84,18,18,1,data/cnn_processed/cnn_data.npz,ID 단위 70/15/15 분할
